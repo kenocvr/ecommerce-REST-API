@@ -1,0 +1,22 @@
+version: '2'
+services:
+  ecommerce-app:
+    image: ecommerce
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,swagger
+      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ecommerce-postgresql:5432/ecommerce
+      - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
+      - SPRING_DATA_JEST_URI=http://ecommerce-elasticsearch:9200
+      - SPRING_ELASTICSEARCH_REST_URIS=http://ecommerce-elasticsearch:9200
+    ports:
+      - 8080:8080
+  ecommerce-postgresql:
+    extends:
+      file: postgresql.yml
+      service: ecommerce-postgresql
+  ecommerce-elasticsearch:
+    extends:
+      file: elasticsearch.yml
+      service: ecommerce-elasticsearch
